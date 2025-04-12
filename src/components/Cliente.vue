@@ -1,57 +1,53 @@
 <template>
-  <div :class="{'cliente': !isPremium,'cliente-premium': isPremium}">
-    <h4>Nome: {{ cliente.nome }}</h4>
-    <hr>
+  <div :class="['box', isPremium ? 'has-background-dark has-text-warning' : 'has-background-info-light']">
+    <h4 :class="{'gold-text': isPremium}" class="title is-5">Nome: {{ cliente.nome }}</h4>
     <p>Email: {{ cliente.email }}</p>
-    <p v-if="showIdade === true">Idade: {{ cliente.idade }}</p>
+    <p v-if="showIdade">Idade: {{ cliente.idade }}</p>
     <p v-else>O usuário escondeu a idade!</p>
-    <button @click="mudarCor">Mudar cor!</button>
-    <button @click="deletarCliente">Deletar</button> <hr>
 
+    <div class="buttons mt-2">
+      <button class="button is-warning" @click="mudarCor">Mudar cor!</button>
+      <button class="button is-danger" @click="deletarCliente">Deletar</button>
+    </div>
+
+    <hr>
+    <p class="is-italic">ID Especial: {{ idEspecial }}</p>
   </div>
 </template>
 
 <script>
 export default {
-  data(){
+  data() {
     return {
-      isPremium: false    
-    }
+      isPremium: false
+    };
   },
   props: {
     cliente: Object,
     showIdade: {
-      type: Boolean
+      type: Boolean,
+      default: true
     }
   },
   methods: {
-    mudarCor(){
-      this.isPremium = !this.isPremium
+    mudarCor() {
+      this.isPremium = !this.isPremium;
     },
-    deletarCliente(){
-      this.$emit("deletarClienteEvent", {component: this, idCliente: this.cliente.id})
+    deletarCliente() {
+      this.$emit("deletarClienteEvent", { component: this, idCliente: this.cliente.id });
     }
   },
-}
+  computed: {
+    idEspecial() {
+      return (this.cliente.email + this.cliente.nome + this.cliente.id).toUpperCase();
+    }
+  }
+};
 </script>
 
-
 <style scoped>
-    .cliente{
-        background-color: rgb(118, 192, 252);
-        max-width: 600px;
-        height: 250px;
-        padding: 1%;
-        margin-top: 2%;
-    }
 
-    .cliente-premium{
-        background-color: rgb(0, 0, 0);
-        color: gold;
-        max-width:600px;
-        height: 250px;
-        padding: 1%;
-        margin-top: 2%;
-    }
-
+  .gold-text {
+  color: gold;
+}
 </style>
